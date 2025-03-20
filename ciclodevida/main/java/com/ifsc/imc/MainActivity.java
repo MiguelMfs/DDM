@@ -22,10 +22,17 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        button=findViewById(R.id.button);
+        button.setOnClickListener(v -> {
+            
+        })
+
         Log.d("ciclodevida", "onResume");
         Toast.makeText(this,"onCreate",Toast.LENGTH_LONG).show();
     }
