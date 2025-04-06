@@ -1,28 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="1"
-        tools:layout_editor_absoluteX="59dp"
-        tools:layout_editor_absoluteY="341dp" />
+        android:padding="16dp">
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Button"
-        app:layout_constraintTop_toBottomOf="@+id/button2"
-        tools:layout_editor_absoluteX="160dp" />
+        <!-- Nome -->
+        <EditText
+            android:id="@+id/etNome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Nome"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Endereço -->
+        <EditText
+            android:id="@+id/etEndereco"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Endereço"
+            app:layout_constraintTop_toBottomOf="@id/etNome"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Cidade -->
+        <EditText
+            android:id="@+id/etCidade"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Cidade"
+            app:layout_constraintTop_toBottomOf="@id/etEndereco"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintTop_toBottomOf="@id/etCidade"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Telefone -->
+        <EditText
+            android:id="@+id/etTelefone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Telefone"
+            android:inputType="phone"
+            app:layout_constraintTop_toBottomOf="@id/etEmail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Estado -->
+        <Spinner
+            android:id="@+id/spinnerEstado"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/etTelefone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <!-- CEP -->
+        <EditText
+            android:id="@+id/etCep"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="CEP"
+            android:inputType="number"
+            app:layout_constraintTop_toBottomOf="@id/spinnerEstado"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Aniversário + Botão do Calendário -->
+        <EditText
+            android:id="@+id/etAniversario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Aniversário"
+            android:focusable="false"
+            app:layout_constraintTop_toBottomOf="@id/etCep"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnCalendario"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <ImageButton
+            android:id="@+id/btnCalendario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Abrir calendário"
+            android:src="@android:drawable/ic_menu_my_calendar"
+            app:layout_constraintTop_toTopOf="@id/etAniversario"
+            app:layout_constraintBottom_toBottomOf="@id/etAniversario"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
