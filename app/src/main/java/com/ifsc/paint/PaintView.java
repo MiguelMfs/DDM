@@ -16,6 +16,10 @@ public class PaintView extends View {
 
     private DrawingMode drawingMode = DrawingMode.PATH;
 
+    public void setPaintColor(int color) {
+        paint.setColor(color);
+    }
+
     private Paint paint;
     private Path path;
     private float startX, startY;
