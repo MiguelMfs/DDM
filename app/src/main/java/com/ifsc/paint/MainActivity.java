@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.AlertDialog;
+import android.graphics.Color;
 
 public class MainActivity extends AppCompatActivity {
     private PaintView paintView;
-    private int currentColor = android.graphics.Color.BLACK;
+    private int currentColor = Color.BLACK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +26,27 @@ public class MainActivity extends AppCompatActivity {
         Button btnCircle = findViewById(R.id.btnCircle);
         Button btnClear = findViewById(R.id.btnClear);
         Button btnRectangle = findViewById(R.id.btnRectangle);
+        Button btnColor = findViewById(R.id.btnColor);
 
+        btnColor.setOnClickListener(v -> showColorPicker());
         btnDraw.setOnClickListener(v -> paintView.setDrawingMode(PaintView.DrawingMode.PATH));
         btnCircle.setOnClickListener(v -> paintView.setDrawingMode(PaintView.DrawingMode.CIRCLE));
         btnClear.setOnClickListener(v -> paintView.clear());
         btnRectangle.setOnClickListener(v -> paintView.setDrawingMode(PaintView.DrawingMode.RECTANGLE));
+    }
 
+    private void showColorPicker() {
+        final String[] colorNames = {"Preto", "Vermelho", "Verde", "Azul", "Amarelo", "Roxo"};
+        final int[] colors = {Color.BLACK, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.MAGENTA};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Escolha uma cor");
+
+        builder.setItems(colorNames, (dialog, which) -> {
+            int selectedColor = colors[which];
+            paintView.setPaintColor(selectedColor);
+        });
+
+        builder.show();
     }
 }
