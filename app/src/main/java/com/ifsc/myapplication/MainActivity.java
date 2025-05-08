@@ -25,14 +25,26 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-public class ActivityFormularioConstraint extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private Button buttonClick;
+    private TextView textViewClicks;
+    private int clickCount = 0; 
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_formulario_constraint);
-        }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        buttonClick = findViewById(R.id.buttonClick);
+        textViewClicks = findViewById(R.id.textViewClicks);
+
+        buttonClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickCount++;
+                textViewClicks.setText("Número de Cliques: " + clickCount);
+            }
+        });
     }
+}
