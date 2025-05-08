@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.ifsc.contaclick;
 
 import android.os.Bundle;
 
