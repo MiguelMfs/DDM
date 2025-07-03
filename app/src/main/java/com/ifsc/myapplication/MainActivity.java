@@ -1,61 +1,94 @@
 package com.example.sensores;
 
-import android.app.Activity;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity implements SensorEventListener {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private TextView sensorTextView;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+
+public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
+    private MapView map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Inicializar configurações do osmdroid
+        Configuration.getInstance().load(
+                getApplicationContext(),
+                androidx.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+        );
+
         setContentView(R.layout.activity_main);
 
-        sensorTextView = findViewById(R.id.sensor_text);
+        // Inicializar o MapView
+        map = findViewById(R.id.map);
+        map.setMultiTouchControls(true);
+        map.getController().setZoom(18.0);
 
-        // Obtém o serviço de sensores
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        // Solicitar permissões
+        requestPermissionsIfNecessary();
 
-        // Obtém o acelerômetro
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        // Overlay de localização
+        MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(
+                new GpsMyLocationProvider(this), map);
+        locationOverlay.enableMyLocation();
+        map.getOverlays().add(locationOverlay);
+
+        // Quando a localização for obtida pela primeira vez
+        locationOverlay.runOnFirstFix(() -> {
+            Location loc = locationOverlay.getLastFix();
+            if (loc != null) {
+                runOnUiThread(() -> {
+                    GeoPoint geoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+                    map.getController().setCenter(geoPoint);
+                });
+            }
+        });
+    }
+
+    private void requestPermissionsIfNecessary() {
+        String[] permissions = new String[] {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+
+        for (String permission : permissions) {
+            if (ActivityCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS_REQUEST_CODE);
+                return;
+            }
+        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // Registra o listener
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Desregistra o listener
-        mSensorManager.unregisterListener(this);
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Pode ser ignorado se não precisar acompanhar mudanças de precisão
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0]; // Eixo X
-            float y = event.values[1]; // Eixo Y
-            float z = event.values[2]; // Eixo Z
-
-            String texto = String.format("Acelerômetro:\nX: %.2f\nY: %.2f\nZ: %.2f", x, y, z);
-            sensorTextView.setText(texto);
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            boolean allGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+            if (!allGranted) {
+                Toast.makeText(this, "Permissões de localização são necessárias!", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
